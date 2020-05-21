@@ -12,7 +12,8 @@ loadConfigParameters
 debugVisualize = 0;
 
 % COCO vs. foot
-modes = 0; % For COCO
+modes = 14; % for Raziel
+% modes = 0 % For COCO
 % modes = 1; % For foot (2014)
 % modes = 2; % For foot (2017)
 % modes = 3; % For car14_v1
@@ -32,9 +33,15 @@ for mode = modes
     % COCO body
     if mode == 0
         dataType = 'train2017';
-        load([sMatFolder, 'coco_kpt.mat']);
+        load([sMatFolder, 'coco_kpt_original.mat']);
         matAnnotations = coco_kpt;
         opt.FileName = [sJsonFolder, 'COCO.json'];
+    % Raziel
+    elseif mode == 14
+        dataType = 'raziel';
+        load([sMatFolder, 'coco_kpt.mat']);
+        matAnnotations = coco_kpt;
+        opt.FileName = [sJsonFolder, 'Raziel.json'];
     % Foot 2014
     elseif mode == 1
         sNumberKeyPoints = 21;
@@ -138,8 +145,9 @@ for mode = modes
         % Process each person on the image
         numerPeople = length(matAnnotations(imageIndex).annorect);
         for person = 1:numerPeople
-            % Skip person if number parts is too low or segmentation area  too small
-            if matAnnotations(imageIndex).annorect(person).num_keypoints >= 5 && matAnnotations(imageIndex).annorect(person).area >= 32*32
+            % Skip person if number parts is too low (Was >=5 #Tom) or segmentation area
+            % too small 
+            if matAnnotations(imageIndex).annorect(person).num_keypoints >= 1 && matAnnotations(imageIndex).annorect(person).area >= 32*32
                 % Skip person if distance to exiting person is too small
                 personCenter = [matAnnotations(imageIndex).annorect(person).bbox(1) + matAnnotations(imageIndex).annorect(person).bbox(3) / 2, ...
                                 matAnnotations(imageIndex).annorect(person).bbox(2) + matAnnotations(imageIndex).annorect(person).bbox(4) / 2];
@@ -174,10 +182,12 @@ for mode = modes
                     elseif mode >= 4 && mode <= 6
                         jointAll(counter).dataset = 'car22';
                     % Body and/or foot
+                    elseif mode == 14
+                        jointAll(counter).dataset = 'Raziel';
                     else
                         jointAll(counter).dataset = 'COCO';
                     end
-                    if (mode == 0 || mode == 2)
+                    if (mode == 0 || mode == 2 || mode == 14)
                         jointAll(counter).img_paths = sprintf('%012d.jpg', matAnnotations(imageIndex).image_id);
                     elseif mode == 1
                         jointAll(counter).img_paths = sprintf([dataType, '/COCO_', dataType, '_%012d.jpg'], matAnnotations(imageIndex).image_id);

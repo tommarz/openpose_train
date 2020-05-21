@@ -20,7 +20,11 @@ loadConfigParameters
 addpath(sCocoMatlabApiFolder);
 addpath('../matlab_utilities/');
 addpath('../matlab_utilities/sort_nat/');
-
+addpath('../dataset/COCO/cocoapi/MatlabAPI/');
+% addpath('../dataset/COCO/cocoapi/MatlabAPI/private');
+% addpath('D:/SwimmingProject/openpose_train/dataset/COCO/cocoapi/MatlabAPI/private')
+addpath('../testing/util');
+addpath('../dataset/COCO/cocoapi/common/');
 % Create folder where results will be saved
 mkdir(sMatFolder)
 
@@ -33,7 +37,8 @@ fprintf('Converting and saving JSON into MAT format\n');
 imagePaths = cell(2, 1);
 
 % Load COCO API with desired (validation vs. training) keypoint annotations
-dataType = 'train2017';
+% dataType = 'train2017';
+dataType = 'raziel';
 
 %% Read images
 fprintf('Reading image names...\n');
@@ -47,6 +52,7 @@ end
 %% Load JSON Annotations
 fprintf('Reading JSON people annotations...\n');
 annotationsFile = sprintf([sAnnotationsFolder, '%s_%s.json'], annType, dataType);
+disp(annotationsFile)
 coco = CocoApi(annotationsFile);
 jsonPeopleAnnotations = coco.data.annotations;
 numberAnnotations = numel(jsonPeopleAnnotations);

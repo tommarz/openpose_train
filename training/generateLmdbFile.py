@@ -14,8 +14,8 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
     print('Creating ' + lmdbPath + ' from ' + jsonFile)
     sys.path.insert(0, caffePythonPath)
     import caffe
-
-    env = lmdb.open(lmdbPath, map_size=int(1e12))
+    # env = lmdb.open(lmdbPath, map_size=int(1e12))
+    env = lmdb.open(lmdbPath, map_size=int(1e8))
     txn = env.begin(write=True)
 
     try:
@@ -39,14 +39,14 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         isBodyMpii = ("MPII" in jsonData[index]['dataset'] and len(jsonData[index]['dataset']) == 4)
         maskMiss = None
         # Read image and maskMiss (if COCO)
-        if "COCO" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
             or "MPII_hand" in jsonData[index]['dataset'] \
             or "mpii-hand" in jsonData[index]['dataset'] \
             or isBodyMpii \
             or "panoptics" in jsonData[index]['dataset'] \
             or "car14" in jsonData[index]['dataset'] \
             or "car22" in jsonData[index]['dataset']:
-            if "COCO" in jsonData[index]['dataset'] or isBodyMpii or "car22" in jsonData[index]['dataset']:
+            if "COCO" in jsonData[index]['dataset'] or isBodyMpii or "car22" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset']:
                 if not maskFolder:
                     maskFolder = imagesFolder
                 # Car22
@@ -69,6 +69,12 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
                         kindOfMask = 'mask2014'
                         maskMissFullPath = maskFolder + 'mask2014/' + kindOfData + '_mask_miss_' + imageIndex + '.png'
                     # COCO 2017
+                    elif "Raziel" in jsonData[index]['dataset']:
+                        kindOfData = 'raziel';
+                        imageFullPath = os.path.join(imagesFolder, kindOfData + '/' + jsonData[index]['img_paths']);
+                        kindOfMask = 'mask2017'
+                        maskMissFullPath = maskFolder + kindOfMask + '/' + kindOfData + '/' + imageIndex + '.png'
+												# maskMissFullPath = maskFolder + kindOfMask + '/' + kindOfData + '/' + imageIndex + '.png'
                     else:
                         kindOfData = 'train2017';
                         imageFullPath = os.path.join(imagesFolder, kindOfData + '/' + jsonData[index]['img_paths']);
@@ -113,7 +119,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
             raise Exception('Unknown dataset called ' + jsonData[index]['dataset'] + '.')
 
         # COCO / MPII
-        if "COCO" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
             or isBodyMpii \
             or "face70" in jsonData[index]['dataset'] \
             or "hand21" in jsonData[index]['dataset'] \
@@ -152,47 +158,47 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         # image height, image width
         heightBinary = float2bytes(float(jsonData[index]['img_height']))
         for i in range(len(heightBinary)):
-            metaData[currentLineIndex][i] = ord(heightBinary[i])
+            metaData[currentLineIndex][i] = heightBinary[i]
         widthBinary = float2bytes(float(jsonData[index]['img_width']))
         for i in range(len(widthBinary)):
-            metaData[currentLineIndex][4 + i] = ord(widthBinary[i])
+            metaData[currentLineIndex][4 + i] = widthBinary[i]
         currentLineIndex = currentLineIndex + 1
         # (a) numOtherPeople (uint8), people_index (uint8), annolist_index (float), writeCount(float), totalWriteCount(float)
         metaData[currentLineIndex][0] = jsonData[index]['numOtherPeople']
         metaData[currentLineIndex][1] = jsonData[index]['people_index']
         annolistIndexBinary = float2bytes(float(jsonData[index]['annolist_index']))
         for i in range(len(annolistIndexBinary)): # 2,3,4,5
-            metaData[currentLineIndex][2 + i] = ord(annolistIndexBinary[i])
+            metaData[currentLineIndex][2 + i] = annolistIndexBinary[i]
         countBinary = float2bytes(float(writeCount)) # note it's writecount instead of numberSample!
         for i in range(len(countBinary)):
-            metaData[currentLineIndex][6 + i] = ord(countBinary[i])
+            metaData[currentLineIndex][6 + i] = countBinary[i]
         totalWriteCountBinary = float2bytes(float(totalWriteCount))
         for i in range(len(totalWriteCountBinary)):
-            metaData[currentLineIndex][10 + i] = ord(totalWriteCountBinary[i])
+            metaData[currentLineIndex][10 + i] = totalWriteCountBinary[i]
         numberOtherPeople = int(jsonData[index]['numOtherPeople'])
         currentLineIndex = currentLineIndex + 1
         # (b) objpos_x (float), objpos_y (float)
         objposBinary = float2bytes(jsonData[index]['objpos'])
         for i in range(len(objposBinary)):
-            metaData[currentLineIndex][i] = ord(objposBinary[i])
+            metaData[currentLineIndex][i] = objposBinary[i]
         currentLineIndex = currentLineIndex + 1
         # try:
         # (c) scale_provided (float)
         scaleProvidedBinary = float2bytes(float(jsonData[index]['scale_provided']))
         for i in range(len(scaleProvidedBinary)):
-            metaData[currentLineIndex][i] = ord(scaleProvidedBinary[i])
+            metaData[currentLineIndex][i] = scaleProvidedBinary[i]
         currentLineIndex = currentLineIndex + 1
         # (d) joint_self (3*#keypoints) (float) (3 line)
         joints = np.asarray(jsonData[index]['joint_self']).T.tolist() # transpose to 3*#keypoints
         for i in range(len(joints)):
             rowBinary = float2bytes(joints[i])
             for j in range(len(rowBinary)):
-                metaData[currentLineIndex][j] = ord(rowBinary[j])
+                metaData[currentLineIndex][j] = rowBinary[j]
             currentLineIndex = currentLineIndex + 1
         # (e) check numberOtherPeople, prepare arrays
         if numberOtherPeople!=0:
             # If generated with Matlab JSON format
-            if "COCO" in jsonData[index]['dataset'] \
+            if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset']\
                 or "car22" in jsonData[index]['dataset']:
                 if numberOtherPeople==1:
                     jointOthers = [jsonData[index]['joint_others']]
@@ -218,12 +224,12 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
             for i in range(numberOtherPeople):
                 objposBinary = float2bytes(objposOther[i])
                 for j in range(len(objposBinary)):
-                    metaData[currentLineIndex][j] = ord(objposBinary[j])
+                    metaData[currentLineIndex][j] = objposBinary[j]
                 currentLineIndex = currentLineIndex + 1
             # (g) scaleProvidedOther (numberOtherPeople floats in 1 line)
             scaleProvidedOtherBinary = float2bytes(scaleProvidedOther)
             for j in range(len(scaleProvidedOtherBinary)):
-                metaData[currentLineIndex][j] = ord(scaleProvidedOtherBinary[j])
+                metaData[currentLineIndex][j] = scaleProvidedOtherBinary[j]
             currentLineIndex = currentLineIndex + 1
             # (h) joint_others (3*#keypoints) (float) (numberOtherPeople*3 lines)
             for n in range(numberOtherPeople):
@@ -231,7 +237,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
                 for i in range(len(joints)):
                     rowBinary = float2bytes(joints[i])
                     for j in range(len(rowBinary)):
-                        metaData[currentLineIndex][j] = ord(rowBinary[j])
+                        metaData[currentLineIndex][j] = rowBinary[j]
                     currentLineIndex = currentLineIndex + 1
         # (i) img_paths
         if "dome" in jsonData[index]['dataset'] and "hand21" not in jsonData[index]['dataset'] \
@@ -259,7 +265,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         # COCO: total 7 + 4*numberOtherPeople lines
         # DomeDB: X lines
         # If generated with Matlab JSON format
-        if "COCO" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
             or "hand21" in jsonData[index]['dataset'] \
             or "hand42" in jsonData[index]['dataset'] \
             or isBodyMpii \
@@ -281,7 +287,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
 
         datum = caffe.io.array_to_datum(dataToSave, label=0)
         key = '%07d' % writeCount
-        txn.put(key, datum.SerializeToString())
+        txn.put(str(key).encode(), datum.SerializeToString())
         # Higher number --> Ideally faster, but much more RAM used. 2500 for carfusion was taking about 25GB of RAM.
         # Lower number --> Ideally slower, but much less RAM used
         if writeCount % 500 == 0:
@@ -300,7 +306,8 @@ def generateNegativesLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath)
     sys.path.insert(0, caffePythonPath)
     import caffe
 
-    env = lmdb.open(lmdbPath, map_size=int(1e12))
+    # env = lmdb.open(lmdbPath, map_size=int(1e12))
+    env = lmdb.open(lmdbPath, map_size=int(1e8))
     txn = env.begin(write=True)
 
     jsonData = json.load(open(jsonFile))
@@ -324,7 +331,7 @@ def generateNegativesLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath)
         dataToSave = np.transpose(image, (2, 0, 1))
         datum = caffe.io.array_to_datum(dataToSave, label=0)
         key = '%07d' % writeCount
-        txn.put(key, datum.SerializeToString())
+        txn.put(str(key), str(datum.SerializeToString()))
         if writeCount % 2500 == 0:
             txn.commit()
             txn = env.begin(write=True)

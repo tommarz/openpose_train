@@ -11,7 +11,7 @@ sPafLevel = -(sKeypointLevel-1)     # 0 or 1, depending on sKeypointLevel = 1 or
 # `heat` in [2*n+sKeypointLevel] positions, `vec` in [2*n+sPafLevel] positions
 # If sKeypointLevel is changed, sLabelName must also be swapped
 sLabelName = ['label_heat', 'label_vec', 'label_dist', 'heat_weight', 'vec_weight', 'dist_weight', 'heat_temp', 'vec_temp', 'dist_temp']
-sLNSize = len(sLabelName)/3
+sLNSize = len(sLabelName)//3
 
 
 
@@ -84,7 +84,7 @@ def bilinearUpsampling(factor, numberChannels, deconvName, L, caffeNet, lastLaye
     )
     # Verbose
     if not deploy:
-        print '%s\tch=%d' % (deconvName, numberChannels)
+        print('%s\tch=%d' % (deconvName, numberChannels))
 
 
 
@@ -183,8 +183,8 @@ def setLayersTwoBranches(#dataFolders,
             for index in range(2,6):
                 noBodyNumber = (index%2==0)*noBodyParts + (index%2==1)*noBodyPAFs
                 bodyNumber = (index%2==0)*numberKeyPoints + (index%2==1)*numberPAFs
-                print noBodyNumber
-                print bodyNumber
+                print(noBodyNumber)
+                print(bodyNumber)
                 if index%2==0:
                     caffeNet.tops[sLabelName[index]+'_1'], caffeNet.tops[sLabelName[index]], caffeNet.tops[sLabelName[index]+'_2'] = L.Slice(
                         caffeNet.tops[sLabelName[index]+temp],
@@ -273,7 +273,7 @@ def setLayersTwoBranches(#dataFolders,
                 weight_filler=dict(type='gaussian', std=0.01), bias_filler=dict(type='constant'))
             lastLayer = convName
             if not deploy:
-                print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
             ReLUname = 'relu%d_%d' % (poolCounter, localCounter)
             # PReLU
             if (usePReLU == 1 and layerName[l+1][0] == 'C'):
@@ -289,7 +289,7 @@ def setLayersTwoBranches(#dataFolders,
                 caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[lastLayer], in_place=True)
             localCounter += 1
             if not deploy:
-                print ReLUname
+                print(ReLUname)
         elif layerName[l] == 'B':
             poolCounter += 1
             localCounter = 1
@@ -311,12 +311,12 @@ def setLayersTwoBranches(#dataFolders,
 
             if kernel[l] == 1:
                 try:
-                    halfLayer = 'conv4_' + str(int(lastLayer[6:8])/2 + 2) + '_CPM_concat'
+                    halfLayer = 'conv4_' + str(int(lastLayer[6:8])//2 + 2) + '_CPM_concat'
                 except:
                     print('--------- POSIBLE ERROR, CHECK THIS ---------')
                     # print(lastLayer[6:8])
                     # print(lastLayer[6:7])
-                    halfLayer = 'conv4_' + str(int(lastLayer[6:7])/2 + 2) + '_CPM_concat'
+                    halfLayer = 'conv4_' + str(int(lastLayer[6:7])//2 + 2) + '_CPM_concat'
                     print(halfLayer)
                     # stop
                 # Final concat
@@ -383,7 +383,7 @@ def setLayersTwoBranches(#dataFolders,
             # if not addBinaryLayer:
             #     lastLayer = convName
             if not deploy:
-                print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
             # ReLU (+ BatchNorm) layers
             if layerName[l+1] != 'L':
                 if state == 'image':
@@ -396,8 +396,8 @@ def setLayersTwoBranches(#dataFolders,
                         caffeNet.tops[scaleNormName] = L.Scale(caffeNet.tops[batchNormName], bias_term=True, in_place=True)
                         lastLayer = scaleNormName
                         if not deploy:
-                            print batchNormName
-                            print scaleNormName
+                            print(batchNormName)
+                            print(scaleNormName)
                     ReLUname = 'relu%d_%d_CPM' % (poolCounter, localCounter)
                     # PReLU
                     if usePReLU == 1:
@@ -431,8 +431,8 @@ def setLayersTwoBranches(#dataFolders,
                         caffeNet.tops[scaleNormName] = L.Scale(caffeNet.tops[batchNormName], bias_term=True, in_place=True)
                         lastLayer = scaleNormName
                         if not deploy:
-                            print batchNormName
-                            print scaleNormName
+                            print(batchNormName)
+                            print(scaleNormName)
                     # PReLU
                     if usePReLU == 1:
                         ReLUname = 'Mprelu%d_stage%d' % (convCounter, stage)
@@ -458,7 +458,7 @@ def setLayersTwoBranches(#dataFolders,
                     #         print scaleNormName
                 # lastLayer = ReLUname
                 if not deploy:
-                    print ReLUname
+                    print(ReLUname)
             # if addBinaryLayer:
             #     caffeNet.tops[convName] = L.Convolution(
             #         caffeNet.tops[lastLayer], kernel_size=kernel[l], num_output=numberOutputChannels[l],
@@ -512,7 +512,7 @@ def setLayersTwoBranches(#dataFolders,
                 #         # weight_filler=dict(type='msra'), bias_filler=dict(type='constant'))
                 # lastLayer = convName
                 if not deploy:
-                    print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                    print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
 
                 # ReLU (+ BatchNorm) layers
                 init = ''
@@ -548,7 +548,7 @@ def setLayersTwoBranches(#dataFolders,
                         caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[lastLayer], in_place=True)
                     # Rest
                     if not deploy:
-                        print ReLUname
+                        print(ReLUname)
                     lastLayer = ReLUname
                     # if state == 'image':
                     #     ReLUname = 'relu%d_%d_CPM' % (poolCounter, localCounter)
@@ -656,7 +656,7 @@ def setLayersTwoBranches(#dataFolders,
                     lastLayer = convName
                     # Verbose
                     if not deploy:
-                        print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                        print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
                     convCounter += 1
                     localCounter += 1
         # Convolution layers - 'C1', 'C2', 'C3', 'C1f', 'C2f', 'C3f', 'C1h', 'C2h', 'C3h', ...
@@ -743,7 +743,7 @@ def setLayersTwoBranches(#dataFolders,
             #     lastLayer = convName
             # Verbose
             if not deploy:
-                print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
 
             if layerName[l+1][0] != 'L':
                 if state == 'image':
@@ -763,8 +763,8 @@ def setLayersTwoBranches(#dataFolders,
                         caffeNet.tops[scaleNormName] = L.Scale(caffeNet.tops[batchNormName], bias_term=True, in_place=True)
                         lastLayer = scaleNormName
                         if not deploy:
-                            print batchNormName
-                            print scaleNormName
+                            print(batchNormName)
+                            print(scaleNormName)
                     ReLUname = 'Mrelu%d_stage%d_L%d' % (convCounter, stage, level+1)
                 if not isFinalModel and level == 0:
                     ReLUname += '_temp'
@@ -791,7 +791,7 @@ def setLayersTwoBranches(#dataFolders,
                     caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[lastLayer], in_place=True)
                 # Rest
                 if not deploy:
-                    print ReLUname
+                    print(ReLUname)
                 lastLayer = ReLUname
             else:
                 # Concat previous
@@ -842,9 +842,9 @@ def setLayersTwoBranches(#dataFolders,
                 caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[scaleNormName], in_place=True)
                 lastLayer = ReLUname
                 if not deploy:
-                    print batchNormName
-                    print scaleNormName
-                    print ReLUname
+                    print(batchNormName)
+                    print(scaleNormName)
+                    print(ReLUname)
 
             if layerName[l+1][0] == 'L':
                 raise ValueError("Loss layer should not be after SC.")
@@ -878,7 +878,7 @@ def setLayersTwoBranches(#dataFolders,
                         param=[dict(lr_mult=lr_m, decay_mult=1), dict(lr_mult=lr_m*2, decay_mult=0)])
                 lastLayer = subConvName
                 if not deploy:
-                    print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                    print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
 
                 if index != 2:
                     if state == 'image':
@@ -889,7 +889,7 @@ def setLayersTwoBranches(#dataFolders,
                         ReLUname += '_temp'
                     caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[lastLayer], in_place=True)
                     if not deploy:
-                        print ReLUname
+                        print(ReLUname)
             # Reshape conv?
             if convCounter == 1:
                 reshapeConvName = 'reshapeConv%d_stage%d_L%d' % (convCounter, stage, level+1)
@@ -902,7 +902,7 @@ def setLayersTwoBranches(#dataFolders,
                     param=[dict(lr_mult=lr_m, decay_mult=1)])
                 lastLayer = reshapeConvName
                 if not deploy:
-                    print reshapeConvName
+                    print(reshapeConvName)
                 originalLayer = reshapeConvName
 
             # Final eletwise
@@ -1026,7 +1026,7 @@ def setLayersTwoBranches(#dataFolders,
                                                                bias_filler=dict(type='constant'))
                 lastLayer = subConvName
                 if not deploy:
-                    print '%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m)
+                    print('%s\tch=%d\t%.1f' % (lastLayer, numberOutputChannels[l], lr_m))
 
                 # # For eltwise
                 # if index < 2:
@@ -1097,7 +1097,7 @@ def setLayersTwoBranches(#dataFolders,
                     caffeNet.tops[ReLUname] = L.ReLU(caffeNet.tops[lastLayer], in_place=True)
                 # Rest
                 if not deploy:
-                    print ReLUname
+                    print(ReLUname)
                 lastLayer = ReLUname
                 # if addBinaryLayer:
                 #     if state == 'image':
@@ -1176,7 +1176,7 @@ def setLayersTwoBranches(#dataFolders,
             localCounter = 1
             convCounter += 1
             if not deploy:
-                print lastLayer
+                print(lastLayer)
         # Loss layers
         # elif layerName[l] == 'L': # Old layer never used with PAF style
         #     # Loss: caffeNet.loss layer is only in training and testing nets, but not in deploy net.
@@ -1213,7 +1213,7 @@ def setLayersTwoBranches(#dataFolders,
                 # Euclidean loss
                 caffeNet.tops['loss_stage%d' % stage] = L.EuclideanLoss(
                     caffeNet.tops[name], caffeNet.tops[finalLossName], loss_weight=lrMultDistro[5])
-                print 'loss %d ' % (stage)
+                print('loss %d ' % (stage))
 
             stage += 1
             convCounter = 1
@@ -1288,7 +1288,7 @@ def setLayersTwoBranches(#dataFolders,
                     caffeNet.tops['loss_stage%d_L%d' % (stage, level+1)] = L.EuclideanLoss(
                         caffeNet.tops[name], caffeNet.tops[sLabelName[level]+'_2'], loss_weight=weight)
 
-                print 'loss %d level %d' % (stage, level+1)
+                print('loss %d level %d' % (stage, level+1))
 
             stage += 1
             #last_connect = lastLayer
@@ -1372,7 +1372,7 @@ def setLayersTwoBranches(#dataFolders,
             else:
                 vggLastLayersIndex = len(vggLastLayers)-1
             if not deploy:
-                print lastLayer
+                print(lastLayer)
         # Sharepoint index (the output of the last layer is shared by multiple stages)
         elif layerName[l] == '$':
             sharePoint = lastLayer
@@ -1381,7 +1381,7 @@ def setLayersTwoBranches(#dataFolders,
             stage += 1
             state = 'fuse'
             if not deploy:
-                print 'share'
+                print('share')
         # Reset (e.g., switch body to foot)
         elif layerName[l] == 'reset':
             stage = 0
@@ -1390,7 +1390,7 @@ def setLayersTwoBranches(#dataFolders,
             dropCounter = 1
             localCounter = 1
             if not deploy:
-                print 'reset'
+                print('reset')
         else:
             raise ValueError("Unknown parameter: " + layerName[l])
 
@@ -1465,7 +1465,7 @@ def getSolverPrototxt(learningRateInit, numberIterations, snapshotFolder, transf
     # except:
     #     print "transformParams[0]['prob_secondary'] not found, using default stepRatio = 1.0"
     #     stepRatio = 1.0
-    print "Disabled step ratio, using stepRatio = 1.0"
+    print("Disabled step ratio, using stepRatio = 1.0")
     stepRatio = 1.0
     string = ('# Net Path Location\n\
 net: "pose_training.prototxt"\n\

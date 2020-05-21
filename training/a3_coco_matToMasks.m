@@ -24,6 +24,9 @@ disableWarnings = true;
 
 % Load auxiliary functions
 addpath('../matlab_utilities/'); % progressBarInit, progressBarUpdate, blendMask, progressDisplay
+addpath('../matlab_utilities/sort_nat/');
+addpath('../dataset/COCO/cocoapi/MatlabAPI/');
+addpath('../testing/util');
 
 % Create directories to save generated masks/segmentations
 mkdir(sImageMaskFolder)
@@ -32,7 +35,8 @@ mkdir(sSegmentationFolder)
 % Start parpool if not started
 startParallel(disableWarnings);
 
-for mode = 1 % Body
+for mode = 14 % Raziel
+% for mode = 1 % Body
 % for mode = 2:4 % Car22
 % for mode = 6:-1:5 % For hand21, hand42
 % for mode = 7 % For face70
@@ -89,6 +93,14 @@ for mode = 1 % Body
         matAnnotations = coco_kpt;
         imageMaskFolder = [sImageMaskFolder, subDataType, '/'];
         imageSegmentationFolder = [sSegmentationFolder, subDataType, '/'];
+    % Raziel Dataset
+    elseif mode == 14
+        load([sMatFolder, 'coco_kpt.mat']);
+        dataType = 'raziel_seg';
+        imageMaskFolder = [sImageMaskFolder, dataType, '/'];
+        mkdir([sSegmentationFolder, dataType])
+        imageSegmentationFolder = [sSegmentationFolder, dataType, '/'];
+        matAnnotations = coco_kpt;    
     else
         assert(false, 'Unknown mode.');
     end
@@ -101,12 +113,12 @@ for mode = 1 % Body
     % Display progress bar
     progressBarInit();
     % Enable parfor to speed up the code
-    parfor imageIndex = 1:numberImagesWithPeople
+    for imageIndex = 1:numberImagesWithPeople
 %     for imageIndex = 1:numberImagesWithPeople
         % Update progress bar
         progressBarUpdate(imageIndex, numberImagesWithPeople);
         % Paths
-        if mode == 1
+        if mode == 1 || mode == 14 % Raziel
             imagePath = sprintf([dataType, '/%012d.jpg'], matAnnotations(imageIndex).image_id);
             maskMissPath = sprintf([imageMaskFolder, '%012d.png'], matAnnotations(imageIndex).image_id);
             segmentationPath = sprintf([imageSegmentationFolder, '%012d.png'], matAnnotations(imageIndex).image_id);
@@ -162,7 +174,7 @@ for mode = 1 % Body
         if maskNotGenerated
             % Generate masks
             % Paths
-            if mode == 1
+            if mode == 1 || mode == 14 % Raziel
                 image = imread([sImageFolder, imagePath]);
                 minScale = 0.3;
             % Car22

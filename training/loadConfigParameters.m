@@ -12,7 +12,9 @@ sAnnotationsFolder = [sCocoApiPath, 'annotations/'];
 sCocoMatlabApiFolder = [sCocoApiPath, 'MatlabAPI/'];
 sImageFolder = [sCocoApiPath, 'images/'];
 sImageMaskFolder = [sImageFolder, 'mask2017/'];
+% sImageMaskFolder = [sImageFolder, 'maskRaziel/'];
 sSegmentationFolder = [sImageFolder, 'segmentation2017/'];
+% sSegmentationFolder = [sImageFolder, 'segmentationRaziel/'];
 sJsonFolder = [sDatasetFolder, 'json/'];
 sMatFolder = [sDatasetFolder, 'mat/'];
 

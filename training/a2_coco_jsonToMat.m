@@ -29,7 +29,8 @@ annType = annTypes{3}; % specify dataType/annType
 
 % Converting and saving validation and training JSON data into MAT format
 fprintf('Converting and saving JSON into MAT format\n');
-for mode = 0:1 % Body
+for mode = 14 % Raziel
+% for mode = 1 % Body
 % for mode = 2:3 % Foot
 % for mode = 4 % Car14
 % for mode = 5:7 % Car22
@@ -74,6 +75,9 @@ for mode = 0:1 % Body
     % Dome135
     elseif mode == 13
         dataType = 'dome';
+    % Raziel
+    elseif mode == 14
+        dataType = 'raziel';
     % Unknown
     else
         assert(false, 'Unknown mode.');
@@ -82,8 +86,8 @@ for mode = 0:1 % Body
     if (mode == 2 || mode == 3)
         dataType = [dataType, '_foot_v2'];
         numberKeyPoints = 23;
-    % COCO
-    elseif (mode == 0 || mode == 1)
+    % COCO & Raziel
+    elseif (mode == 0 || mode == 1 || mode == 14)
         numberKeyPoints = 17;
     % Car14
     elseif mode == 4
@@ -210,7 +214,7 @@ end
         coco_val = matAnnotations;
         save([sMatFolder, 'coco_val.mat'], 'coco_val');
     % Body (train)
-    elseif mode == 1
+    elseif mode == 1 
         coco_kpt = matAnnotations;
         save([sMatFolder, 'coco_kpt.mat'], 'coco_kpt');
     % Foot
@@ -250,6 +254,10 @@ end
     elseif mode == 13
         coco_kpt = matAnnotations;
         save([sMatFolder, 'dome135.mat'], 'coco_kpt');
+    % Body (train) Raziel Dataset
+    elseif mode == 14
+        coco_kpt = matAnnotations;
+        save([sMatFolder, 'coco_kpt.mat'], 'coco_kpt');
     % Unknown
     else
         assert(false, 'Unknown mode.');
