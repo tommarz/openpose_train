@@ -21,9 +21,9 @@ addpath(sCocoMatlabApiFolder);
 addpath('../matlab_utilities/');
 addpath('../matlab_utilities/sort_nat/');
 addpath('../dataset/COCO/cocoapi/MatlabAPI/');
-% addpath('../dataset/COCO/cocoapi/MatlabAPI/private');
+addpath('private');
 % addpath('../testing/util');
-addpath('../dataset/COCO/cocoapi/common/');
+addpath('common');
 % Create folder where results will be saved
 mkdir(sMatFolder)
 
