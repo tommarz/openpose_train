@@ -121,11 +121,11 @@ sCar22V7MaskFolder = '/mnt/DataUbuntu/openpose_train/dataset/COCO/cocoapi/images
 # Negatives
 # COCO background
 sBackgroundLmdbPath = sDatasetFolderLmdb + 'lmdb_background/'
-sBackgroundImagesFolder = sCocoImagesFolder + 'raziel/'
+sBackgroundImagesFolder = sCocoImagesFolder + 'custom/'
 sBackgroundJsonFile = sCocoDatasetFolder + 'json/coco_negatives.json'
 # COCO car background
 sCarBackgroundLmdbPath = sDatasetFolderLmdb + 'lmdb_car_background/'
-sCarBackgroundImagesFolder = sCocoImagesFolder + 'raziel/'
+sCarBackgroundImagesFolder = sCocoImagesFolder + 'custom/'
 sCarBackgroundJsonFile = sCocoDatasetFolder + 'json/coco_negatives_cars.json'
 
 

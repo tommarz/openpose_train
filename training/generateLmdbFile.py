@@ -15,7 +15,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
     sys.path.insert(0, caffePythonPath)
     import caffe
     # env = lmdb.open(lmdbPath, map_size=int(1e12))
-    env = lmdb.open(lmdbPath, map_size=int(1e8))
+    env = lmdb.open(lmdbPath, map_size=int(1e10))
     txn = env.begin(write=True)
 
     try:
@@ -70,7 +70,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
                         maskMissFullPath = maskFolder + 'mask2014/' + kindOfData + '_mask_miss_' + imageIndex + '.png'
                     # COCO 2017
                     elif "custom" in jsonData[index]['dataset']:
-                        kindOfData = 'raziel';
+                        kindOfData = 'custom';
                         imageFullPath = os.path.join(imagesFolder, kindOfData + '/' + jsonData[index]['img_paths']);
                         kindOfMask = 'mask2017'
                         maskMissFullPath = maskFolder + kindOfMask + '/' + kindOfData + '/' + imageIndex + '.png'
