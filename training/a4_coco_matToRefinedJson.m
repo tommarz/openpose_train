@@ -12,7 +12,7 @@ loadConfigParameters
 debugVisualize = 0;
 
 % COCO vs. foot
-modes = 14; % for Raziel
+modes = 14; % for custom
 % modes = 0 % For COCO
 % modes = 1; % For foot (2014)
 % modes = 2; % For foot (2017)
@@ -36,12 +36,12 @@ for mode = modes
         load([sMatFolder, 'coco_kpt_original.mat']);
         matAnnotations = coco_kpt;
         opt.FileName = [sJsonFolder, 'COCO.json'];
-    % Raziel
+    % custom
     elseif mode == 14
-        dataType = 'raziel';
+        dataType = 'custom';
         load([sMatFolder, 'coco_kpt.mat']);
         matAnnotations = coco_kpt;
-        opt.FileName = [sJsonFolder, 'Raziel.json'];
+        opt.FileName = [sJsonFolder, 'custom.json'];
     % Foot 2014
     elseif mode == 1
         sNumberKeyPoints = 21;
@@ -183,7 +183,7 @@ for mode = modes
                         jointAll(counter).dataset = 'car22';
                     % Body and/or foot
                     elseif mode == 14
-                        jointAll(counter).dataset = 'Raziel';
+                        jointAll(counter).dataset = 'custom';
                     else
                         jointAll(counter).dataset = 'COCO';
                     end

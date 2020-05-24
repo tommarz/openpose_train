@@ -4,7 +4,7 @@ import os
 from generateProtoTxt import generateProtoTxt
 from math import floor, ceil
 
-sCaffeFolder =  '/home/gines/devel/openpose_caffe_train/'
+sCaffeFolder =  'D:/caffe_train/'
 sDatasetFolder = '../dataset/'
 # sLmdbFolders = ['lmdb_dome_bodyHand/']
 sLmdbFolders = ['lmdb_coco/']
@@ -29,17 +29,17 @@ sNormalization = 0
 # sPretrainedModelPath = '/media/posefs3b/Users/gines/openpose_train/dataset/DenseNet-Caffe/DenseNet_121.caffemodel'
 # sNormalization = 2
 
-sAddFoot = 1
-# sAddFoot = 0
-sAddMpii = 1
-# sAddMpii = 0
+# sAddFoot = 1
+sAddFoot = 0
+# sAddMpii = 1
+sAddMpii = 0
 # sAddFace = 1
 sAddFace = 0
 # sAddHands = 1
 sAddHands = 0
 # sAddDome = 1
 sAddDome = 0
-sAddExtraPAFs = True # Extra PAFs? (BODY_25E, BODY_23)
+sAddExtraPAFs = False # Extra PAFs? (BODY_25E, BODY_23)
 # carVersion = 1
 carVersion = 0
 # sAddDistance = 1
@@ -64,7 +64,7 @@ if sSuperModel:
 else:
     sLearningRateInit = 1e-4   # 4e-5, 2e-5
 if sSuperModel == 2:
-    sLearningRateInit /= 2.5
+    sLearningRateInit //= 2.5
     sBatchSizes = [3]
 else:
     sBatchSizes = [10] # [10], Gines: 21
@@ -75,7 +75,7 @@ if sSuperModel:
 else:
     sImageScale = 368
     sNumberStages = [5, 1, 0, 0, 0, 0]
-sScaleMins = [1.0/3.0] # [1.0/3.0, 0.5, 0.25] # 0.5, 0.25 does harm it
+sScaleMins = [1.0//3.0] # [1.0/3.0, 0.5, 0.25] # 0.5, 0.25 does harm it
 sScaleMaxs = [1.5] # [1.5, 8.0, 2.5]
 sCenterSwapProb = [0.0, 1.0, 0.0]
 sMaxDegreeRotations = [45] # 40, 60 does harm it
@@ -206,7 +206,7 @@ if sAddHands:
     sProbabilities = "0.05;" + str(0.83-sProbabilityOnlyBackground-0.05) + ";0.05;0.0075;0.0075;0.005;0.06;0.04"
     sModelNames += ['HAND_' + partsStr + '_21'] + ['HAND_' + partsStr + '_42']
     sBodyPAFs = 2*(sBodyParts-1+11+7*sAddFace) # 2x shoulder-topHead --> neck-topHead
-    sScaleMins += [2.0/3.0, 0.5]
+    sScaleMins += [2.0//3.0, 0.5]
     sScaleMaxs += [4.5, 4.0]
     sMaxDegreeRotations += [sMaxDegreeRotations[0]]*2
     # sMaxDegreeRotations += [90]*2
@@ -256,15 +256,15 @@ sBodyPartsAndBkg = sBodyParts+1*(not sAddMpii)
 # 2. Different lr with the new clip size --> 1e-2, 1e-3, 1e-4
 
 ## Debugging - Check absolute paths
-print '\n------------------------- Absolute paths: -------------------------'
-print 'sCaffeFolder absolute path:\t' + sCaffeFolder
-print 'sLmdbFolder absolute paths:'
+print('\n------------------------- Absolute paths: -------------------------')
+print('sCaffeFolder absolute path:\t' + sCaffeFolder)
+print('sLmdbFolder absolute paths:')
 for lmdbFolder in sLmdbFolders:
-    print '\t' + lmdbFolder
-print 'sLmdbBackground absolute path:\t' + sLmdbBackground
-print 'sPretrainedModelPath absolute path:\t' + sPretrainedModelPath
-print 'sTrainingFolder absolute path:\t' + sTrainingFolder
-print '\n'
+    print('\t' + lmdbFolder)
+print('sLmdbBackground absolute path:\t' + sLmdbBackground)
+print('sPretrainedModelPath absolute path:\t' + sPretrainedModelPath)
+print('sTrainingFolder absolute path:\t' + sTrainingFolder)
+print('\n')
 
 def concatStage(concatString, layerName, kernel, numberOutputChannels, stride):
     layerName               += [concatString]
@@ -280,7 +280,7 @@ def resetStage(layerName, kernel, numberOutputChannels, stride):
 
 def getStringFromVector(vector):
     stringEquivalent = str(vector[0])
-    for i in xrange(1, len(vector)):
+    for i in range(1, len(vector)):
         stringEquivalent += ';' + str(vector[i])
     return stringEquivalent
 
@@ -376,8 +376,8 @@ if __name__ == "__main__":
         #     numberIterations = sNumberIterations
         isFinalModel = True
         numberIterations = sNumberIterations
-        print ' '
-        print trainingFolder
+        print(' ')
+        print(trainingFolder)
 
         if sSuperModel:
             dcNumber=2
@@ -626,7 +626,7 @@ if __name__ == "__main__":
         #     pretrainedModelPath = sPretrainedModelPath
         # else:
         #     pretrainedModelPath = trainedModelsFolder + '/pose_iter_50000.caffemodel'
-        print pretrainedModelPath
+        print(pretrainedModelPath)
 
         # Create folders where saving
         if not os.path.exists(trainingFolder):

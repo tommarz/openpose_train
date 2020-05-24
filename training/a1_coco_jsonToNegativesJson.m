@@ -38,7 +38,7 @@ imagePaths = cell(2, 1);
 
 % Load COCO API with desired (validation vs. training) keypoint annotations
 % dataType = 'train2017';
-dataType = 'raziel';
+dataType = 'custom';
 
 %% Read images
 fprintf('Reading image names...\n');

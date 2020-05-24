@@ -35,7 +35,7 @@ mkdir(sSegmentationFolder)
 % Start parpool if not started
 startParallel(disableWarnings);
 
-for mode = 14 % Raziel
+for mode = 14 % custom
 % for mode = 1 % Body
 % for mode = 2:4 % Car22
 % for mode = 6:-1:5 % For hand21, hand42
@@ -93,7 +93,7 @@ for mode = 14 % Raziel
         matAnnotations = coco_kpt;
         imageMaskFolder = [sImageMaskFolder, subDataType, '/'];
         imageSegmentationFolder = [sSegmentationFolder, subDataType, '/'];
-    % Raziel Dataset
+    % custom Dataset
     elseif mode == 14
         load([sMatFolder, 'coco_kpt.mat']);
         dataType = 'raziel_seg';
@@ -118,7 +118,7 @@ for mode = 14 % Raziel
         % Update progress bar
         progressBarUpdate(imageIndex, numberImagesWithPeople);
         % Paths
-        if mode == 1 || mode == 14 % Raziel
+        if mode == 1 || mode == 14 % custom
             imagePath = sprintf([dataType, '/%012d.jpg'], matAnnotations(imageIndex).image_id);
             maskMissPath = sprintf([imageMaskFolder, '%012d.png'], matAnnotations(imageIndex).image_id);
             segmentationPath = sprintf([imageSegmentationFolder, '%012d.png'], matAnnotations(imageIndex).image_id);
@@ -174,7 +174,7 @@ for mode = 14 % Raziel
         if maskNotGenerated
             % Generate masks
             % Paths
-            if mode == 1 || mode == 14 % Raziel
+            if mode == 1 || mode == 14 % custom
                 image = imread([sImageFolder, imagePath]);
                 minScale = 0.3;
             % Car22

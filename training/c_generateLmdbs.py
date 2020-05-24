@@ -1,15 +1,15 @@
 import os
 from generateLmdbFile import generateLmdbFile, generateNegativesLmdbFile
 
-sCaffePythonPath = os.path.join('/home/gines/devel/openpose_caffe_train', 'python/')
-# sDatasetFolderLmdb = '../dataset/'
-sDatasetFolderLmdb = '/mnt/DataUbuntu/openpose_train/dataset/'
-sDatasetFolder = '/media/posefs3b/Users/gines/openpose_train/dataset/'
+sCaffePythonPath = os.path.join('../../openpose_caffe_train', 'python/')
+sDatasetFolderLmdb = '../dataset/'
+# sDatasetFolderLmdb = '/mnt/DataUbuntu/openpose_train/dataset/'
+sDatasetFolder = '../dataset/'
 # COCO
-sCocoDatasetFolder = sDatasetFolder + 'COCO/'
+sCocoDatasetFolder = sDatasetFolderLmdb + 'COCO/'
 sCocoLmdbPath = sDatasetFolderLmdb + 'lmdb_coco/'
 sCocoImagesFolder = sCocoDatasetFolder + 'cocoapi/images/'
-sCocoJsonFile = sCocoDatasetFolder + 'json/COCO.json'
+sCocoJsonFile = sCocoDatasetFolder + 'json/custom.json'
 # FootCoco2017
 sFootCoco2017DatasetFolder = sCocoDatasetFolder
 sFootCoco2017LmdbPath = sDatasetFolderLmdb + 'lmdb_coco2017_foot/'
@@ -121,32 +121,32 @@ sCar22V7MaskFolder = '/mnt/DataUbuntu/openpose_train/dataset/COCO/cocoapi/images
 # Negatives
 # COCO background
 sBackgroundLmdbPath = sDatasetFolderLmdb + 'lmdb_background/'
-sBackgroundImagesFolder = sCocoImagesFolder + 'train2017/'
+sBackgroundImagesFolder = sCocoImagesFolder + 'raziel/'
 sBackgroundJsonFile = sCocoDatasetFolder + 'json/coco_negatives.json'
 # COCO car background
 sCarBackgroundLmdbPath = sDatasetFolderLmdb + 'lmdb_car_background/'
-sCarBackgroundImagesFolder = sCocoImagesFolder + 'train2017/'
+sCarBackgroundImagesFolder = sCocoImagesFolder + 'raziel/'
 sCarBackgroundJsonFile = sCocoDatasetFolder + 'json/coco_negatives_cars.json'
 
 
 
 if __name__ == "__main__":
     # Positives
-    # # Body and/or foot
-    # generateLmdbFile(sCocoLmdbPath, sCocoImagesFolder, sCocoJsonFile, sCaffePythonPath)
+    # Body and/or foot
+    generateLmdbFile(sCocoLmdbPath, sCocoImagesFolder, sCocoJsonFile, sCaffePythonPath)
     # generateLmdbFile(sFootCoco2017LmdbPath, sFootCoco2017ImagesFolder, sFootCoco2017JsonFile, sCaffePythonPath)
     # generateLmdbFile(sMpiiLmdbPath, sMpiiImagesFolder, sMpiiJsonFile, sCaffePythonPath, sMpiiMaskFolder)
-    # # Face
+    # Face
     # generateLmdbFile(sFaceFrgcLmdbPath, sFaceFrgcImagesFolder, sFaceFrgcJsonFile, sCaffePythonPath)
     # generateLmdbFile(sFaceMultipieLmdbPath, sFaceMultipieImagesFolder, sFaceMultipieJsonFile, sCaffePythonPath)
     # generateLmdbFile(sFaceMaskOutLmdbPath, sFaceMaskOutImagesFolder, sFaceMaskOutJsonFile, sCaffePythonPath, sFaceMaskOutMaskFolder)
-    # # Hand
+    # Hand
     # generateLmdbFile(sHandMpiiLmdbPath, sHandMpiiImagesFolder, sHandMpiiJsonFile, sCaffePythonPath, sHandMpiiMaskFolder)
     # generateLmdbFile(sHandDomeLmdbPath, sHandDomeImagesFolder, sHandDomeJsonFile, sCaffePythonPath, sHandDomeMaskFolder)
-    # # Dome
+    # Dome
     # generateLmdbFile(sDomeLmdbPath, sDomeImagesFolder, sDomeJsonFile, sCaffePythonPath)
 
-    # # Others
+    # Others
     # generateLmdbFile(sDomeLmdbPath, sDomeImagesFolder, sDomeJsonFile, sCaffePythonPath)
     # generateLmdbFile(sMpiiHandLmdbPath, sMpiiHandImagesFolder, sMpiiHandJsonFile, sCaffePythonPath)
     # generateLmdbFile(sFootCoco2014LmdbPath, sFootCoco2014ImagesFolder, sFootCoco2014JsonFile, sCaffePythonPath)
@@ -161,5 +161,5 @@ if __name__ == "__main__":
 
 
     # Negatives
-    # generateNegativesLmdbFile(sBackgroundLmdbPath, sBackgroundImagesFolder, sBackgroundJsonFile, sCaffePythonPath)
+    generateNegativesLmdbFile(sBackgroundLmdbPath, sBackgroundImagesFolder, sBackgroundJsonFile, sCaffePythonPath)
     # generateNegativesLmdbFile(sCarBackgroundLmdbPath, sCarBackgroundImagesFolder, sCarBackgroundJsonFile, sCaffePythonPath)

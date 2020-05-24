@@ -39,14 +39,14 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         isBodyMpii = ("MPII" in jsonData[index]['dataset'] and len(jsonData[index]['dataset']) == 4)
         maskMiss = None
         # Read image and maskMiss (if COCO)
-        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "custom" in jsonData[index]['dataset'] \
             or "MPII_hand" in jsonData[index]['dataset'] \
             or "mpii-hand" in jsonData[index]['dataset'] \
             or isBodyMpii \
             or "panoptics" in jsonData[index]['dataset'] \
             or "car14" in jsonData[index]['dataset'] \
             or "car22" in jsonData[index]['dataset']:
-            if "COCO" in jsonData[index]['dataset'] or isBodyMpii or "car22" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset']:
+            if "COCO" in jsonData[index]['dataset'] or isBodyMpii or "car22" in jsonData[index]['dataset'] or "custom" in jsonData[index]['dataset']:
                 if not maskFolder:
                     maskFolder = imagesFolder
                 # Car22
@@ -69,7 +69,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
                         kindOfMask = 'mask2014'
                         maskMissFullPath = maskFolder + 'mask2014/' + kindOfData + '_mask_miss_' + imageIndex + '.png'
                     # COCO 2017
-                    elif "Raziel" in jsonData[index]['dataset']:
+                    elif "custom" in jsonData[index]['dataset']:
                         kindOfData = 'raziel';
                         imageFullPath = os.path.join(imagesFolder, kindOfData + '/' + jsonData[index]['img_paths']);
                         kindOfMask = 'mask2017'
@@ -119,7 +119,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
             raise Exception('Unknown dataset called ' + jsonData[index]['dataset'] + '.')
 
         # COCO / MPII
-        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "custom" in jsonData[index]['dataset'] \
             or isBodyMpii \
             or "face70" in jsonData[index]['dataset'] \
             or "hand21" in jsonData[index]['dataset'] \
@@ -198,7 +198,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         # (e) check numberOtherPeople, prepare arrays
         if numberOtherPeople!=0:
             # If generated with Matlab JSON format
-            if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset']\
+            if "COCO" in jsonData[index]['dataset'] or "custom" in jsonData[index]['dataset']\
                 or "car22" in jsonData[index]['dataset']:
                 if numberOtherPeople==1:
                     jointOthers = [jsonData[index]['joint_others']]
@@ -265,7 +265,7 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         # COCO: total 7 + 4*numberOtherPeople lines
         # DomeDB: X lines
         # If generated with Matlab JSON format
-        if "COCO" in jsonData[index]['dataset'] or "Raziel" in jsonData[index]['dataset'] \
+        if "COCO" in jsonData[index]['dataset'] or "custom" in jsonData[index]['dataset'] \
             or "hand21" in jsonData[index]['dataset'] \
             or "hand42" in jsonData[index]['dataset'] \
             or isBodyMpii \
