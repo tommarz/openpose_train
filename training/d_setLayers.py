@@ -4,7 +4,7 @@ import os
 from generateProtoTxt import generateProtoTxt
 from math import floor, ceil
 
-sCaffeFolder =  'D:/caffe_train/'
+sCaffeFolder = '../../openpose_caffe_train/'
 sDatasetFolder = '../dataset/'
 # sLmdbFolders = ['lmdb_dome_bodyHand/']
 sLmdbFolders = ['lmdb_coco/']
@@ -29,10 +29,10 @@ sNormalization = 0
 # sPretrainedModelPath = '/media/posefs3b/Users/gines/openpose_train/dataset/DenseNet-Caffe/DenseNet_121.caffemodel'
 # sNormalization = 2
 
-# sAddFoot = 1
-sAddFoot = 0
-# sAddMpii = 1
-sAddMpii = 0
+sAddFoot = 1
+# sAddFoot = 0
+sAddMpii = 1
+# sAddMpii = 0
 # sAddFace = 1
 sAddFace = 0
 # sAddHands = 1

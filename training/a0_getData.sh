@@ -6,6 +6,7 @@ clear && clear
 DOWNLOAD_TEST_DATA=YES
 REMOVE_ZIPS_AFTER_UNZIPPED=YES
 REMOVE_IMAGES_FOLDERS_IF_PREVIOUSLY_UNZIPPED=YES
+DOWNLOAD_COCO=NO
 
 # Parameters
 ANNOTATIONS_FOLDER=./cocoapi/
@@ -35,68 +36,71 @@ mkdir -p json
 mkdir -p mat
 echo ' '
 
-echo 'Removing previous image folders (optional)...'
-if [ ${REMOVE_IMAGES_FOLDERS_IF_PREVIOUSLY_UNZIPPED} = "YES" ]; then
-    echo Removing ${ANNOTATIONS_FOLDER}annotations/...
-    rm -rf ${ANNOTATIONS_FOLDER}annotations/
-    echo Removing ${IMAGES_FOLDER}train2017/...
-    rm -rf ${IMAGES_FOLDER}train2017/
-    echo Removing ${IMAGES_FOLDER}val2017/...
-    rm -rf ${IMAGES_FOLDER}val2017/
-else
-    echo 'Skipped'
+if [ ${DOWNLOAD_COCO} = "YES" ]; then
+		echo 'Removing previous image folders (optional)...'
+		if [ ${REMOVE_IMAGES_FOLDERS_IF_PREVIOUSLY_UNZIPPED} = "YES" ]; then
+				echo Removing ${ANNOTATIONS_FOLDER}annotations/...
+				rm -rf ${ANNOTATIONS_FOLDER}annotations/
+				echo Removing ${IMAGES_FOLDER}train2017/...
+				rm -rf ${IMAGES_FOLDER}train2017/
+				echo Removing ${IMAGES_FOLDER}val2017/...
+				rm -rf ${IMAGES_FOLDER}val2017/
+		else
+				echo 'Skipped'
+		fi
+		echo ' '
+
+		echo 'Downloading and unzip -q oficial COCO dataset (multi-threaded)...'
+		wget -c http://images.cocodataset.org/annotations/annotations_trainval2017.zip -P $ANNOTATIONS_FOLDER
+		# Thread starts
+		unzip -q ${ANNOTATIONS_FOLDER}annotations_trainval2017.zip -d $ANNOTATIONS_FOLDER/ &
+		wget -c http://images.cocodataset.org/annotations/image_info_test2017.zip -P $ANNOTATIONS_FOLDER
+		wait
+		# Thread ends
+		# Thread starts
+		unzip -q ${ANNOTATIONS_FOLDER}image_info_test2017.zip -d $ANNOTATIONS_FOLDER/ &
+		wget -c http://images.cocodataset.org/zips/train2017.zip -P $IMAGES_FOLDER
+		wait
+		# Thread ends
+		# Thread starts
+		unzip -q ${IMAGES_FOLDER}train2017.zip -d $IMAGES_FOLDER &
+		wget -c http://images.cocodataset.org/zips/val2017.zip -P $IMAGES_FOLDER
+		wait
+		# Thread ends
+		unzip -q ${IMAGES_FOLDER}val2017.zip -d $IMAGES_FOLDER
+		echo ' '
+
+
+
+		echo 'Testing data (optional)...'
+		if [ ${DOWNLOAD_TEST_DATA} = "YES" ]; then
+				# Download and unzip -q oficial COCO test dataset
+				wget -c http://images.cocodataset.org/zips/test2017.zip -P $IMAGES_FOLDER
+				if [ ${REMOVE_IMAGES_FOLDERS_IF_PREVIOUSLY_UNZIPPED} = "YES" ]; then
+						echo Removing ${IMAGES_FOLDER}test2017/...
+						rm -rf ${IMAGES_FOLDER}test2017/
+				fi
+				unzip -q ${IMAGES_FOLDER}test2017.zip -d $IMAGES_FOLDER
+		else
+				echo 'Skipped'
+		fi
+		echo ' '
+
+
+
+		echo 'Optional - Saving space by removing original zip files (optional)...'
+		if [ ${REMOVE_ZIPS_AFTER_UNZIPPED} = "YES" ]; then
+				rm -f person_keypoints_trainval2017.zip
+				rm -f ${IMAGES_FOLDER}train2017.zip
+				rm -f ${IMAGES_FOLDER}val2017.zip
+				rm -f ${IMAGES_FOLDER}test2017.zip
+		else
+				echo 'Skipped'
+		fi
+		echo ' '
+	else
+			echo 'Skipped downloading COCO dataset'
 fi
 echo ' '
-
-echo 'Downloading and unzip -q oficial COCO dataset (multi-threaded)...'
-wget -c http://images.cocodataset.org/annotations/annotations_trainval2017.zip -P $ANNOTATIONS_FOLDER
-# Thread starts
-unzip -q ${ANNOTATIONS_FOLDER}annotations_trainval2017.zip -d $ANNOTATIONS_FOLDER/ &
-wget -c http://images.cocodataset.org/annotations/image_info_test2017.zip -P $ANNOTATIONS_FOLDER
-wait
-# Thread ends
-# Thread starts
-unzip -q ${ANNOTATIONS_FOLDER}image_info_test2017.zip -d $ANNOTATIONS_FOLDER/ &
-wget -c http://images.cocodataset.org/zips/train2017.zip -P $IMAGES_FOLDER
-wait
-# Thread ends
-# Thread starts
-unzip -q ${IMAGES_FOLDER}train2017.zip -d $IMAGES_FOLDER &
-wget -c http://images.cocodataset.org/zips/val2017.zip -P $IMAGES_FOLDER
-wait
-# Thread ends
-unzip -q ${IMAGES_FOLDER}val2017.zip -d $IMAGES_FOLDER
-echo ' '
-
-
-
-echo 'Testing data (optional)...'
-if [ ${DOWNLOAD_TEST_DATA} = "YES" ]; then
-    # Download and unzip -q oficial COCO test dataset
-    wget -c http://images.cocodataset.org/zips/test2017.zip -P $IMAGES_FOLDER
-    if [ ${REMOVE_IMAGES_FOLDERS_IF_PREVIOUSLY_UNZIPPED} = "YES" ]; then
-        echo Removing ${IMAGES_FOLDER}test2017/...
-        rm -rf ${IMAGES_FOLDER}test2017/
-    fi
-    unzip -q ${IMAGES_FOLDER}test2017.zip -d $IMAGES_FOLDER
-else
-    echo 'Skipped'
-fi
-echo ' '
-
-
-
-echo 'Optional - Saving space by removing original zip files (optional)...'
-if [ ${REMOVE_ZIPS_AFTER_UNZIPPED} = "YES" ]; then
-    rm -f person_keypoints_trainval2017.zip
-    rm -f ${IMAGES_FOLDER}train2017.zip
-    rm -f ${IMAGES_FOLDER}val2017.zip
-    rm -f ${IMAGES_FOLDER}test2017.zip
-else
-    echo 'Skipped'
-fi
-echo ' '
-
-
 
 echo 'Script finished'
