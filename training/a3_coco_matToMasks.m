@@ -26,7 +26,7 @@ disableWarnings = true;
 addpath('../matlab_utilities/'); % progressBarInit, progressBarUpdate, blendMask, progressDisplay
 addpath('../matlab_utilities/sort_nat/');
 addpath('../dataset/COCO/cocoapi/MatlabAPI/');
-addpath('../testing/util');
+% addpath('../testing/util');
 
 % Create directories to save generated masks/segmentations
 mkdir(sImageMaskFolder)
@@ -96,7 +96,7 @@ for mode = 14 % custom
     % custom Dataset
     elseif mode == 14
         load([sMatFolder, 'coco_kpt.mat']);
-        dataType = 'raziel_seg';
+        dataType = 'custom';
         imageMaskFolder = [sImageMaskFolder, dataType, '/'];
         mkdir([sSegmentationFolder, dataType])
         imageSegmentationFolder = [sSegmentationFolder, dataType, '/'];

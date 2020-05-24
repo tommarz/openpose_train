@@ -22,8 +22,7 @@ addpath('../matlab_utilities/');
 addpath('../matlab_utilities/sort_nat/');
 addpath('../dataset/COCO/cocoapi/MatlabAPI/');
 % addpath('../dataset/COCO/cocoapi/MatlabAPI/private');
-% addpath('D:/SwimmingProject/openpose_train/dataset/COCO/cocoapi/MatlabAPI/private')
-addpath('../testing/util');
+% addpath('../testing/util');
 addpath('../dataset/COCO/cocoapi/common/');
 % Create folder where results will be saved
 mkdir(sMatFolder)
