@@ -14,7 +14,7 @@ sModelNames = []
 # sLmdbFolders = ['lmdb_coco/', 'lmdb_dome/']
 # sLmdbFolders = ['lmdb_foot/', 'lmdb_dome/']
 # sLmdbFolders = ['lmdb_coco/', 'lmdb_dome_bodyHand/', 'lmdb_mpii_hand']
-sLmdbBackground = 'lmdb_background/'
+sLmdbBackground = 'lmdb_background_original/'
 sTrainingFolder = '../training_results/pose/'
 sPretrainedModelPath = sDatasetFolder + 'vgg/VGG_ILSVRC_19_layers.caffemodel'
 sNormalization = 0
@@ -67,7 +67,7 @@ if sSuperModel == 2:
     sLearningRateInit //= 2.5
     sBatchSizes = [3]
 else:
-    sBatchSizes = [10] # [10], Gines: 21
+    sBatchSizes = [4] # [10], Gines: 21
 # Data augmentation
 if sSuperModel:
     sImageScale = 480
