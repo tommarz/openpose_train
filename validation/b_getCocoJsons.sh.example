@@ -18,7 +18,8 @@ IMAGE_DIR_HAND_DOME="/home/gines/devel/images/hand_dome_val/"
 IMAGE_DIR_HAND_MPII="/home/gines/devel/images/hand_mpii_val/"
 
 echo "Common parameters to both files a_*.sh and b_*.sh"
-SHARED_FOLDER=../openpose_train/training_results/${EXPERIMENT}/pose/body_${NUMBER_FOLDER}/
+SHARED_FOLDER=../openpose_train/training_results/pose/model/
+# SHARED_FOLDER=../openpose_train/training_results/${EXPERIMENT}/pose/body_${NUMBER_FOLDER}/
 # SHARED_FOLDER=/media/posefs3b/Users/gines/openpose_train/training_results/${EXPERIMENT}/pose/body_${NUMBER_FOLDER}b/
 # SHARED_FOLDER=/media/posefs3b/Users/gines/openpose_train/training_results/${EXPERIMENT}/pose/body_${NUMBER_FOLDER}d/
 # SHARED_FOLDER=/media/posefs3b/Users/gines/openpose_train/training_results/${EXPERIMENT}/pose/body_${NUMBER_FOLDER}e/

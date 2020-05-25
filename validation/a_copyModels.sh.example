@@ -4,28 +4,25 @@ clear && clear
 
 echo "Common parameters to both files a_*.sh and b_*.sh"
 EXPERIMENT=19_SOMETHING
-SHARED_FOLDER=/media/posefs3b/Users/gines/openpose_train/training_results/${EXPERIMENT}/pose/body_19_25/
+SHARED_FOLDER=../training_results/pose/model/
 echo " "
 
 echo "Paths"
-TRAINING_FOLDER=/mnt/4TB/openpose_train/
-MODELS_RELATIVE_FOLDER=training_results/pose/model/
+TRAINING_FOLDER=../training
+MODELS_RELATIVE_FOLDER=../training_results/pose/model/
 PROTOTXT_RELATIVE_FOLDER=training_results/pose/
 echo " "
 
 echo "File names"
 PROTOTXT_NAME=*.prototxt
 TRAINING_LOG_NAME=*.txt
-SET_LAYERS_FILE_NAME1=training/d_setLayers.py
-SET_LAYERS_FILE_NAME2=training/generateProtoTxt.py
-SET_LAYERS_FILE_NAME3=training/getResNetProtoTxt.py
+SET_LAYERS_FILE_NAME1=../training/d_setLayers.py
+SET_LAYERS_FILE_NAME2=../training/generateProtoTxt.py
+SET_LAYERS_FILE_NAME3=../training/getResNetProtoTxt.py
 echo " "
 
 SLEEPING_TIME=600
 SLEEPING_TIME_MIN=10
-
-
-
 
 
 # Different code than b_*.sh
@@ -58,9 +55,6 @@ do
     echo "Copying again in 10 seconds"
     sleep 10
 done
-
-
-
 
 
 echo "Finished! Exiting script..."
