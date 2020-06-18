@@ -158,42 +158,42 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
         # image height, image width
         heightBinary = float2bytes(float(jsonData[index]['img_height']))
         for i in range(len(heightBinary)):
-            metaData[currentLineIndex][i] = heightBinary[i]
+            metaData[currentLineIndex][i] = ord(heightBinary[i])
         widthBinary = float2bytes(float(jsonData[index]['img_width']))
         for i in range(len(widthBinary)):
-            metaData[currentLineIndex][4 + i] = widthBinary[i]
+            metaData[currentLineIndex][4 + i] = ord(widthBinary[i])
         currentLineIndex = currentLineIndex + 1
         # (a) numOtherPeople (uint8), people_index (uint8), annolist_index (float), writeCount(float), totalWriteCount(float)
         metaData[currentLineIndex][0] = jsonData[index]['numOtherPeople']
         metaData[currentLineIndex][1] = jsonData[index]['people_index']
         annolistIndexBinary = float2bytes(float(jsonData[index]['annolist_index']))
         for i in range(len(annolistIndexBinary)): # 2,3,4,5
-            metaData[currentLineIndex][2 + i] = annolistIndexBinary[i]
+            metaData[currentLineIndex][2 + i] = ord(annolistIndexBinary[i])
         countBinary = float2bytes(float(writeCount)) # note it's writecount instead of numberSample!
         for i in range(len(countBinary)):
-            metaData[currentLineIndex][6 + i] = countBinary[i]
+            metaData[currentLineIndex][6 + i] = ord(countBinary[i])
         totalWriteCountBinary = float2bytes(float(totalWriteCount))
         for i in range(len(totalWriteCountBinary)):
-            metaData[currentLineIndex][10 + i] = totalWriteCountBinary[i]
+            metaData[currentLineIndex][10 + i] = ord(totalWriteCountBinary[i])
         numberOtherPeople = int(jsonData[index]['numOtherPeople'])
         currentLineIndex = currentLineIndex + 1
         # (b) objpos_x (float), objpos_y (float)
         objposBinary = float2bytes(jsonData[index]['objpos'])
         for i in range(len(objposBinary)):
-            metaData[currentLineIndex][i] = objposBinary[i]
+            metaData[currentLineIndex][i] = ord(objposBinary[i])
         currentLineIndex = currentLineIndex + 1
         # try:
         # (c) scale_provided (float)
         scaleProvidedBinary = float2bytes(float(jsonData[index]['scale_provided']))
         for i in range(len(scaleProvidedBinary)):
-            metaData[currentLineIndex][i] = scaleProvidedBinary[i]
+            metaData[currentLineIndex][i] = ord(scaleProvidedBinary[i])
         currentLineIndex = currentLineIndex + 1
         # (d) joint_self (3*#keypoints) (float) (3 line)
         joints = np.asarray(jsonData[index]['joint_self']).T.tolist() # transpose to 3*#keypoints
         for i in range(len(joints)):
             rowBinary = float2bytes(joints[i])
             for j in range(len(rowBinary)):
-                metaData[currentLineIndex][j] = rowBinary[j]
+                metaData[currentLineIndex][j] = ord(rowBinary[j])
             currentLineIndex = currentLineIndex + 1
         # (e) check numberOtherPeople, prepare arrays
         if numberOtherPeople!=0:
@@ -302,12 +302,13 @@ def generateLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath, maskFold
     txn.commit()
     env.close()
 
+
 def generateNegativesLmdbFile(lmdbPath, imagesFolder, jsonFile, caffePythonPath):
     sys.path.insert(0, caffePythonPath)
     import caffe
 
-    # env = lmdb.open(lmdbPath, map_size=int(1e12))
-    env = lmdb.open(lmdbPath, map_size=int(1e8))
+    env = lmdb.open(lmdbPath, map_size=int(1e12))
+    # env = lmdb.open(lmdbPath, map_size=int(1e8))
     txn = env.begin(write=True)
 
     jsonData = json.load(open(jsonFile))
