@@ -1,0 +1,5 @@
+scipy==0.19.1
+matplotlib==2.1.1
+numpy==1.13.3
+lmdb==0.98
+natsort==7.0.1

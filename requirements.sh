@@ -1,0 +1,1 @@
+sudo apt-get install libprotobuf-dev=3.0.0-9.1ubuntu1 libleveldb-dev=1.20-2 libsnappy-dev=1.1.7-1 libopencv-dev=3.2.0+dfsg-4ubuntu0.1 libhdf5-serial-dev=1.10.0-patch1+docs-4 protobuf-compiler=3.0.0-9.1ubuntu1 libboost-all-dev=1.65.1.0ubuntu1 libatlas-base-dev=3.10.3-5 python-numpy=1:1.13.3-2ubuntu1
